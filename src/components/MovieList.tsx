@@ -1,25 +1,10 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-import {
-  fetchNowPlaying,
-  fetchUpComing,
-  MovieListResponseType,
-} from "../Service/movieService";
+import { fetchNowPlaying, fetchUpComing } from "../Service/movieService";
 import Movie from "./Movie";
 
 export default function MovieList(props: any) {
   const { movies, setMovies, category } = props;
-
-  // const [movies, setMovies] = useState<MovieListResponseType>({
-  //   dates: {
-  //     maximum: "",
-  //     minimum: "",
-  //   },
-  //   page: 1,
-  //   results: [],
-  //   total_pages: 0,
-  // });
 
   const [infiniteRef] = useInfiniteScroll({
     loading: false,
@@ -48,13 +33,6 @@ export default function MovieList(props: any) {
     rootMargin: "0px 0px 400px 0px",
   });
 
-  useEffect(() => {
-    (async () => {
-      const result = await fetchNowPlaying();
-      setMovies(result);
-    })();
-  }, []);
-
   return (
     <>
       <List>
@@ -65,6 +43,7 @@ export default function MovieList(props: any) {
               name={movie.title}
               originalName={movie.original_title}
               image={movie.poster_path}
+              genre={movie.genre_ids}
               overview={movie.overview}
             />
           );

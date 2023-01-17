@@ -6,6 +6,7 @@ interface MovieProps {
   image: string;
   name: string;
   originalName: string;
+  genre: number;
   overview: string;
 }
 
@@ -33,6 +34,7 @@ export default function Movie(props: MovieProps) {
           modalClose={handleModal}
           name={props.name}
           originalName={props.originalName}
+          genre={props.genre}
           overview={props.overview}
         />
       )}

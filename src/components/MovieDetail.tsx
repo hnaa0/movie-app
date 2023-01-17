@@ -1,7 +1,33 @@
 import styled from "@emotion/styled";
 
 export default function MovieDetail(props: any) {
-  const { modalClose, name, originalName, overview } = props;
+  const { modalClose, name, originalName, genre, overview } = props;
+
+  interface GenreType {
+    [id: number]: string;
+  }
+
+  const GENRES: GenreType = {
+    10751: "가족",
+    27: "공포",
+    99: "다큐멘터리",
+    18: "드라마",
+    10749: "로맨스",
+    28: "액션",
+    12: "모험",
+    9648: "미스터리",
+    80: "범죄",
+    37: "서부",
+    53: "스릴러",
+    16: "애니메이션",
+    36: "역사",
+    10402: "음악",
+    10752: "전쟁",
+    35: "코미디",
+    14: "판타지",
+    878: "SF",
+    10770: "TV 영화",
+  };
 
   return (
     <Container
@@ -26,7 +52,15 @@ export default function MovieDetail(props: any) {
           <Title>{name}</Title>
           <OriginalTitle>{originalName}</OriginalTitle>
         </TitleGroup>
-        <Genre>드라마,로맨스,음악</Genre>
+        <Genre>
+          {genre.map((id: number) => {
+            if (id === genre[genre.length - 1]) {
+              return GENRES[id];
+            } else {
+              return `${GENRES[id]}, `;
+            }
+          })}
+        </Genre>
         <Overview>{overview}</Overview>
       </ModalContainer>
     </Container>
@@ -82,7 +116,7 @@ const Title = styled.h1`
 
 const OriginalTitle = styled.h2`
   font-style: italic;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: normal;
   color: #a5a5a5;
 `;
