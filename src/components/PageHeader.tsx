@@ -1,14 +1,37 @@
 import styled from "@emotion/styled";
 
-export default function PageHeader() {
+type menuType = {
+  id: number;
+  label: string;
+  url: string;
+};
+
+export default function PageHeader(props: any) {
+  const { onSelect, category } = props;
+  const CATEGORY_LIST = [
+    { id: 0, label: "Now Playing", url: "/now_playing" },
+    { id: 1, label: "Up Coming", url: "/upcoming" },
+  ];
+
   return (
     <Header>
       <Title>Movie</Title>
       <Menu>
-        <li value="nowPlaying" style={{ fontWeight: "bold" }}>
-          Now Playing
-        </li>
-        <li value="upComing">Up Coming</li>
+        {CATEGORY_LIST.map((data: menuType) => {
+          return (
+            <li
+              style={
+                category == data.label
+                  ? { fontWeight: "bold" }
+                  : { fontWeight: "normal" }
+              }
+              key={data.id}
+              onClick={() => onSelect(data.label)}
+            >
+              {data.label}
+            </li>
+          );
+        })}
       </Menu>
     </Header>
   );
@@ -38,7 +61,11 @@ const Menu = styled.ul`
   font-size: 20px;
   color: #a5a5a5;
 
-  &:hover {
+  & li:hover {
     cursor: pointer;
+  }
+
+  & li:active {
+    font-weight: bold;
   }
 `;

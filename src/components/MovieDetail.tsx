@@ -1,10 +1,16 @@
 import styled from "@emotion/styled";
 
-export default function MovieDetail() {
+export default function MovieDetail(props: any) {
+  const { modalClose, name, originalName, overview } = props;
+
   return (
-    <Container>
+    <Container
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <ModalContainer>
-        <CloseBtn>
+        <CloseBtn onClick={modalClose}>
           <svg
             width="20"
             height="20"
@@ -12,42 +18,43 @@ export default function MovieDetail() {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M2 2L14 14" stroke="white" stroke-width="1.5" />
-            <path d="M2 14L14 2" stroke="white" stroke-width="1.5" />
+            <path d="M2 2L14 14" stroke="white" strokeWidth="1.5" />
+            <path d="M2 14L14 2" stroke="white" strokeWidth="1.5" />
           </svg>
         </CloseBtn>
         <TitleGroup>
-          <Title>라라랜드</Title>
-          <OriginalTitle>La La Land</OriginalTitle>
+          <Title>{name}</Title>
+          <OriginalTitle>{originalName}</OriginalTitle>
         </TitleGroup>
         <Genre>드라마,로맨스,음악</Genre>
-        <Overview>
-          황홀한 사랑, 순수한 희망, 격렬한 열정... 이 곳에서 모든 감정이
-          폭발한다! 꿈을 꾸는 사람들을 위한 별들의 도시 ‘라라랜드’. 재즈
-          피아니스트 ‘세바스찬’과 배우 지망생 ‘미아’, 인생에서 가장 빛나는 순간
-          만난 두 사람은 미완성인 서로의 무대를 만들어가기 시작한다.
-        </Overview>
+        <Overview>{overview}</Overview>
       </ModalContainer>
     </Container>
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
 
 const ModalContainer = styled.section`
-  color: #fff;
   z-index: 1000;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 650px;
-  height: 400px;
+  padding: 28px;
   border-radius: 16px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  color: #fff;
   background-color: #252525;
-  padding: 28px;
 `;
 
 const CloseBtn = styled.button`
@@ -83,7 +90,9 @@ const OriginalTitle = styled.h2`
 const Genre = styled.span``;
 
 const Overview = styled.p`
+  height: 180px;
   margin: 32px 0;
-  overflow-x: auto;
+  padding-right: 12px;
+  overflow: scroll;
   line-height: 1.5;
 `;

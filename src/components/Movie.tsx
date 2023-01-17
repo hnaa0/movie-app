@@ -1,12 +1,41 @@
 import styled from "@emotion/styled";
+import { ChangeEvent, useState } from "react";
+import MovieDetail from "./MovieDetail";
 
-const imgLink =
-  "https://i.pinimg.com/550x/d8/73/c5/d873c5098705172190f2fdbc7e4abe72.jpg";
+interface MovieProps {
+  image: string;
+  name: string;
+  originalName: string;
+  overview: string;
+}
 
-export default function Movie() {
+export default function Movie(props: MovieProps) {
+  const [modal, setModal] = useState(false);
+
+  const handleModal = () => {
+    if (modal === false) {
+      setModal(true);
+      document.body.style.overflow = "hidden";
+    } else {
+      setModal(false);
+      document.body.style.overflow = "unset";
+    }
+  };
+
   return (
-    <Item>
-      <Img src={imgLink} alt="포스터" />
+    <Item onClick={handleModal}>
+      <Img
+        src={`https://image.tmdb.org/t/p/w500${props.image}`}
+        alt={props.name}
+      />
+      {modal && (
+        <MovieDetail
+          modalClose={handleModal}
+          name={props.name}
+          originalName={props.originalName}
+          overview={props.overview}
+        />
+      )}
     </Item>
   );
 }
