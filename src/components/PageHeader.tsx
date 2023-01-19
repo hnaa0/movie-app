@@ -1,23 +1,33 @@
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux/es/exports";
+import { RootState, useAppDispatch } from "../Store";
+import { changeCategory } from "../Store/categoryTypeSlice";
+import { MouseEvent } from "react";
 
-type menuType = {
+type categoryType = {
   id: number;
   label: string;
   url: string;
 };
 
-export default function PageHeader(props: any) {
-  const { onSelect, category } = props;
+export default function PageHeader() {
+  const dispatch = useAppDispatch();
+  const category = useSelector((state: RootState) => state.category.type);
   const CATEGORY_LIST = [
     { id: 0, label: "Now Playing", url: "/now_playing" },
     { id: 1, label: "Up Coming", url: "/upcoming" },
   ];
 
+  const handleCategory = (e: any) => {
+    const categoryValue = e.target.textContent;
+    dispatch(changeCategory(categoryValue));
+  };
+
   return (
     <Header>
       <Title>Movie</Title>
       <Menu>
-        {CATEGORY_LIST.map((data: menuType) => {
+        {CATEGORY_LIST.map((data: categoryType) => {
           return (
             <li
               style={
@@ -26,7 +36,7 @@ export default function PageHeader(props: any) {
                   : { fontWeight: "normal" }
               }
               key={data.id}
-              onClick={() => onSelect(data.label)}
+              onClick={handleCategory}
             >
               {data.label}
             </li>

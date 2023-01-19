@@ -1,10 +1,26 @@
 import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
-import { fetchNowPlaying, fetchUpComing } from "../Service/movieService";
+import { useSelector } from "react-redux";
+import {
+  fetchNowPlaying,
+  fetchUpComing,
+  MovieListResponseType,
+} from "../Service/movieService";
+import { RootState } from "../Store";
 import Movie from "./Movie";
 
-export default function MovieList(props: any) {
-  const { movies, setMovies, category } = props;
+export default function MovieList() {
+  const category = useSelector((state: RootState) => state.category.type);
+  const [movies, setMovies] = useState<MovieListResponseType>({
+    dates: {
+      maximum: "",
+      minimum: "",
+    },
+    page: 1,
+    results: [],
+    total_pages: 0,
+  });
 
   const [infiniteRef] = useInfiniteScroll({
     loading: false,
@@ -33,6 +49,20 @@ export default function MovieList(props: any) {
     rootMargin: "0px 0px 400px 0px",
   });
 
+  useEffect(() => {
+    if (category == "Now Playing") {
+      (async () => {
+        const result = await fetchNowPlaying();
+        setMovies(result);
+      })();
+    } else {
+      (async () => {
+        const result = await fetchUpComing();
+        setMovies(result);
+      })();
+    }
+  }, [category]);
+
   return (
     <>
       <List>
@@ -49,7 +79,7 @@ export default function MovieList(props: any) {
           );
         })}
       </List>
-      <Loading ref={infiniteRef}>Loading</Loading>
+      <Loading ref={infiniteRef}>Loading...</Loading>
     </>
   );
 }
@@ -63,5 +93,9 @@ const List = styled.ul`
 `;
 
 const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
   color: #fff;
 `;
