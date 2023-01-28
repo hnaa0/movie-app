@@ -29,7 +29,7 @@ export interface MovieListResponseType {
   total_pages: number;
 }
 
-export const fetchNowPlaying = async (nextPage?: number) => {
+export const fetchNowPlayingAPI = async (nextPage?: number) => {
   const pageCount = nextPage ? nextPage : 1;
   const URL = `https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=ko-KR&page=${pageCount}&region=KR`;
 
@@ -37,7 +37,7 @@ export const fetchNowPlaying = async (nextPage?: number) => {
   return res.data;
 };
 
-export const fetchUpComing = async (nextPage?: number) => {
+export const fetchUpComingAPI = async (nextPage?: number) => {
   const pageCount = nextPage ? nextPage : 1;
   const URL = `https://api.themoviedb.org/3/movie/upcoming?api_key=${api_key}&language=ko-KR&page=${pageCount}&region=KR`;
 

@@ -1,26 +1,17 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
 import { useSelector } from "react-redux";
-import {
-  fetchNowPlaying,
-  fetchUpComing,
-  MovieListResponseType,
-} from "../Service/movieService";
-import { RootState } from "../Store";
+import { RootState, useAppDispatch } from "../Store";
+import { fetchNowPlaying, fetchUpComing } from "../Store/movieSlice";
 import Movie from "./Movie";
 
 export default function MovieList() {
+  const dispatch = useAppDispatch();
   const category = useSelector((state: RootState) => state.category.type);
-  const [movies, setMovies] = useState<MovieListResponseType>({
-    dates: {
-      maximum: "",
-      minimum: "",
-    },
-    page: 1,
-    results: [],
-    total_pages: 0,
-  });
+  const movies = useSelector((state: RootState) =>
+    category == "Now Playing" ? state.nowPlaying.movies : state.upComing.movies
+  );
 
   const [infiniteRef] = useInfiniteScroll({
     loading: false,
@@ -29,21 +20,11 @@ export default function MovieList() {
       category == "Now Playing"
         ? async () => {
             const nextPage = movies.page + 1;
-            const moreMovies = await fetchNowPlaying(nextPage);
-
-            setMovies({
-              ...moreMovies,
-              results: [...movies.results, ...moreMovies.results],
-            });
+            dispatch(fetchNowPlaying(nextPage));
           }
         : async () => {
             const nextPage = movies.page + 1;
-            const moreMovies = await fetchUpComing(nextPage);
-
-            setMovies({
-              ...moreMovies,
-              results: [...movies.results, ...moreMovies.results],
-            });
+            dispatch(fetchUpComing(nextPage));
           },
     disabled: false,
     rootMargin: "0px 0px 400px 0px",
@@ -51,15 +32,9 @@ export default function MovieList() {
 
   useEffect(() => {
     if (category == "Now Playing") {
-      (async () => {
-        const result = await fetchNowPlaying();
-        setMovies(result);
-      })();
+      dispatch(fetchNowPlaying());
     } else {
-      (async () => {
-        const result = await fetchUpComing();
-        setMovies(result);
-      })();
+      dispatch(fetchUpComing());
     }
   }, [category]);
 

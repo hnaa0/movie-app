@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import MovieDetail from "./MovieDetail";
 
 interface MovieProps {
