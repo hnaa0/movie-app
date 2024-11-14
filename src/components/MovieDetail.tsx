@@ -127,6 +127,20 @@ const Overview = styled.p`
   height: 180px;
   margin: 32px 0;
   padding-right: 12px;
-  overflow: scroll;
+  overflow: auto;
+  overflow-x: hidden;
   line-height: 1.5;
+
+  &:: -webkit-scrollbar {
+    width: 6px;
+  }
+  
+   &::-webkit-scrollbar-thumb {
+    background-color: #bcbcbc;
+    border-radius: 4px;
+  }
+
+   &::-webkit-scrollbar-thumb:hover {
+    background-color: #c9c9c9;
+  }
 `;
